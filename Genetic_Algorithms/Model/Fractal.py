@@ -14,7 +14,7 @@ class Tree:
         pygame.display.set_caption("Fractal Tree")
         self.screen = pygame.display.get_surface()
 
-        self.drawTree(300, 550, -90, 9, 2, 20.0, 10.0)
+        self.drawTree(300, 550, -90, 7, 2, 20.0, 10.0)
         pygame.display.flip()
         while True:
             self.input(pygame.event.wait())
@@ -26,8 +26,17 @@ class Tree:
 
             pygame.draw.line(self.screen, (255, 255, 255), (x1, y1), (x2, y2), branch_thickness)
 
-            self.drawTree(x2, y2, angle - fork_angle, depth - 1, branch_thickness, fork_angle, base_len)
-            self.drawTree(x2, y2, angle + fork_angle, depth - 1, branch_thickness, fork_angle, base_len)
+            # Ramificaciones derecha
+            i = 2
+            while i != 0:
+                self.drawTree(x2, y2, angle + (fork_angle * i), depth - 1, branch_thickness, fork_angle, base_len)
+                i -= 1
+
+            #ramificaciones Izquierda
+            i = 1
+            while i != 0:
+                self.drawTree(x2, y2, angle - (fork_angle * i), depth - 1, branch_thickness, fork_angle, base_len)
+                i -= 1
 
     def input(self, event):
         if event.type == pygame.QUIT:
