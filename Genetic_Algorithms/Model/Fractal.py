@@ -4,13 +4,14 @@ import random
 
 
 class Tree:
+
     window = None
     screen = None
     x1 = 300
     y1 = 550
     angle = -90
 
-    def __init__(self):
+    def __init__(self, depth, thickness, branch_thickness, fork_angle, branch_quantity, base_len):
 
         pygame.init()
         self.window = pygame.display.set_mode((600, 600))
@@ -18,18 +19,18 @@ class Tree:
         self.screen = pygame.display.get_surface()
         self.screen.fill([255, 255, 255])
 
-        depth = 8
-        thickness = 5
-        branch_thickness = (2, 3)
-        fork_angle = (20.0, 30.0)
-        branch_quantity = (2, 4)
-        base_len = (10.0, 15.0)
-
-        self.drawTree(self.x1, self.y1, self.angle, depth, branch_thickness, fork_angle, base_len, branch_quantity, thickness)
+        self.drawTree(self.x1, self.y1, self.angle, depth, branch_thickness, fork_angle, base_len, branch_quantity
+                      , thickness)
         pygame.display.flip()
         pygame.image.save(self.screen, "..\Imagen2.png")
+
+        # SE MANTIENE ESPERANDO POR CERRAR EL DISPLAY
         while True:
-            self.input(pygame.event.wait())
+            if self.input(pygame.event.wait()) == 1:
+                break
+
+        # CIERRA LA EJECUCION DEL DISPLAY DE PYGAME
+        pygame.display.quit()
 
     def drawTree(self, x1, y1, angle, depth, branch_thickness, fork_angle, base_len, branch_quantity, thickness):
         if depth > 0:
@@ -57,23 +58,25 @@ class Tree:
             if not i % 2 == 0:
                 self.drawTree(x2, y2, angle, depth - 1, branch_thickness, fork_angle,
                               base_len, branch_quantity, thickness - 2)
-                #Le resta la iteracion ya hecha
+                # Le resta la iteracion ya hecha
                 i -= 1
 
             if i != 1:
 
-                #Lo divide entre 2 ya que hace 2 operaciones al mismo tiempo
-                i = i/2
+                # Lo divide entre 2 ya que hace 2 operaciones al mismo tiempo
+                i = i / 2
 
                 # Crea las ramificaciones tanto de la izquierda como de la derecha
                 while i > 0:
                     fork_angle_random = random.randint(fork_angle[0], fork_angle[1])
                     self.drawTree(x2, y2, angle + (fork_angle_random * i), depth - 1, branch_thickness, fork_angle,
-                                  base_len , branch_quantity, thickness - 2)
+                                  base_len, branch_quantity, thickness - 2)
                     self.drawTree(x2, y2, angle - (fork_angle_random * i), depth - 1, branch_thickness, fork_angle,
-                                  base_len , branch_quantity, thickness - 2)
+                                  base_len, branch_quantity, thickness - 2)
                     i -= 1
 
-    def input(self, event):
+    @staticmethod
+    def input(event):
         if event.type == pygame.QUIT:
-            exit(0)
+            return 1
+        return 0

@@ -1,11 +1,17 @@
 # IMPORTS
-from tkinter import *
+from tkinter import messagebox
+
+from View.ComponentCreator import ComponentCreator
+
 
 # CLASSES
-class Window:
+class MainWindow:
     PAD = 20
     WIDHTWINDOW = 860
     HEIGHTWINDOW = 650
+
+    # Component Creator
+    comCreator = ComponentCreator()
 
     # Componentes de la ventana
     window = None
@@ -16,27 +22,18 @@ class Window:
         '''
 
         self.controller = controller
-        self.window = self.createWindow('Genetic Algorithms', 'white')
+        self.window = self.comCreator.createWindow('Algoritmos Genéticos', 'white')
+        frame = self.comCreator.createFrame(self.window, 0, 0, self.WIDHTWINDOW-80, self.HEIGHTWINDOW-80)
 
-    def createWindow(self, pTitle, pBackground):
-        '''
-        Function: This function is responsible for creating a window with a title and the background color
-        Inputs: Title, Background color
-        Outputs: Window
-        '''
+        #LABELS
+        self.comCreator.createLabel(frame, "ALGORITMOS GENÉTICOS", 300, 20, 220, 70)
+        self.comCreator.createLabel(frame, "Generación de arboles fractales: ", 40, 150, 300, 40)
 
-        window = Tk()
-        window.resizable(width=False, height=False)
-        window.title(pTitle)
+        #BUTTONS
+        self.comCreator.createButtons(frame, "Probar algoritmo", self.controller.probarAlgoFractales, 360, 150, 140, 40)
 
-        # Window location = center of screen
-        x_window = window.winfo_screenwidth() // 2 - self.WIDHTWINDOW // 2
-        y_window = window.winfo_screenheight() // 2 - self.HEIGHTWINDOW // 2
-        position = str(self.WIDHTWINDOW) + "x" + str(self.HEIGHTWINDOW) + "+" + str(x_window) + "+" + str(y_window)
-
-        window.geometry(position)
-        window.configure(background=pBackground)
-        return window
+    def showMessagesBox(self, dato):
+        messagebox.showerror("Error", dato)
 
     def main(self):
         self.window.mainloop()
