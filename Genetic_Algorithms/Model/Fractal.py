@@ -22,7 +22,7 @@ class Tree:
         self.drawTree(self.x1, self.y1, self.angle, depth, branch_thickness, fork_angle, base_len, branch_quantity
                       , thickness)
         pygame.display.flip()
-        pygame.image.save(self.screen, "..\Imagen2.png")
+        pygame.image.save(self.screen, "..\Imagen.jpg")
 
         # SE MANTIENE ESPERANDO POR CERRAR EL DISPLAY
         while True:

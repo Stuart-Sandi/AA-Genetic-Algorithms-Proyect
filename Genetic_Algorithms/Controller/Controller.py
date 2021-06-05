@@ -2,6 +2,7 @@
 from View.MainWindow import MainWindow
 from View.FractalWindow import FractalWindow
 from Model.Fractal import Tree
+from Model.GeneticAlgorithm import Algoritmo
 
 
 # CLASSES
@@ -94,7 +95,10 @@ class Controller:
         Outputs:
         '''
 
-        self.mainWindow.main()
+        #self.mainWindow.main()
+        algoritmo = Algoritmo()
+        print(algoritmo.fitness("../ImagenPrueba1.png", "../ImagenPrueba3.png"))
+
 
 
 # This is going to create a controller and call main function
