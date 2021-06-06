@@ -24,16 +24,14 @@ class Algoritmo:
         contornos, _ = cv2.findContours(binaria, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
         # dibujar los contornos
-        imgFinal = cv2.imread("../Images/blanco.jpg")
+        imgFinal = cv2.imread("../Images/Blanco.png")
         cv2.drawContours(imgFinal, contornos, -1, (0, 0, 0), 3)
 
         for c in contornos:
             area = cv2.contourArea(c)
 
-        # cv2.imwrite("ImagenPrueba2.jpg", imgFinal)
-        #cv2.imshow("Contornos", imgFinal)
-        #cv2.waitKey(0)
-
+        path = (srcImg[:-4])+"_Contorno.png"
+        cv2.imwrite(path, imgFinal)
         return area
 
     # Porcentaje de similitud entre dos imagenes
@@ -97,23 +95,21 @@ class Algoritmo:
                     break
 
         # Porcentaje de similitud
-        print(contador)
-        print(contadorPixeles)
         return (contador / contadorPixeles) * 100
 
     def fitness(self, srcImg1, srcImg2):
 
-        # areaImg1 = self.calcularAreaContorno(srcImg1)
-        # areaImg2 = self.calcularAreaContorno(srcImg2)
-        #
-        # porcentajeArea = 0
-        #
-        # if areaImg1 >= areaImg2:
-        #     porcentajeArea = 100 - ((areaImg1 - areaImg2) * 100) / areaImg1
-        # else:
-        #     porcentajeArea = 100 - ((areaImg2 - areaImg1) * 100) / areaImg2
+        areaImg1 = self.calcularAreaContorno(srcImg1)
+        areaImg2 = self.calcularAreaContorno(srcImg2)
+
+        porcentajeArea = 0
+
+        # Se calcula la similitud de las areas del contorno de las dos imagenes
+        if areaImg1 >= areaImg2:
+            porcentajeArea = 100 - ((areaImg1 - areaImg2) * 100) / areaImg1
+        else:
+            porcentajeArea = 100 - ((areaImg2 - areaImg1) * 100) / areaImg2
 
         porcentajeSimilitudPixeles = self.calcularSimilitudPixeles(srcImg1, srcImg2)
 
-        #return (porcentajeArea + porcentajeSimilitudPixeles) / 2
-        return porcentajeSimilitudPixeles
+        return (porcentajeArea + porcentajeSimilitudPixeles) / 2

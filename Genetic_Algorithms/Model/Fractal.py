@@ -20,6 +20,20 @@ class Tree:
     branch_quantity = None
     base_len = None
 
+    # Direccion de la imagen
+    path = None
+
+    # Instancias de los arboles madre y padre
+    padre = None
+    madre = None
+
+    # Cadena de Bits
+    porcentaje = None
+    cadenaBits = None
+
+    # Normalizacion
+    normalizacion = None
+
     def __init__(self, depth, thickness, branch_thickness, branch_quantity, fork_angle, base_len, mostrarFractal,
                  generacion, numArbol):
 
@@ -52,8 +66,8 @@ class Tree:
                     break
 
         else:
-            path = "..\Generaciones\Generacion_"+str(generacion)+"\Arbol_"+str(numArbol)+".png"
-            pygame.image.save(self.screen, path)
+            self.path = "..\Generaciones\Generacion_"+str(generacion)+"\Arbol_"+str(numArbol)+".png"
+            pygame.image.save(self.screen, self.path)
 
         # CIERRA LA EJECUCION DEL DISPLAY DE PYGAME
         pygame.display.quit()
@@ -106,6 +120,3 @@ class Tree:
         if event.type == pygame.QUIT:
             return 1
         return 0
-
-    def parametrosABinario(self):
-        return
