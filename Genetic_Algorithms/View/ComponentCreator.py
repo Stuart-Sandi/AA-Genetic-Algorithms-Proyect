@@ -5,10 +5,8 @@ from tkinter.ttk import Combobox
 class ComponentCreator:
 
     PAD = 20
-    WIDHTWINDOW = 860
-    HEIGHTWINDOW = 650
 
-    def createWindow(self, pTitle, pBackground):
+    def createWindow(self, pTitle, pBackground, WIDHTWINDOW, HEIGHTWINDOW):
         '''
         Function: This function is responsible for creating a window with a title and the background color
         Inputs: Title, Background color
@@ -20,9 +18,9 @@ class ComponentCreator:
         window.title(pTitle)
 
         # Window location = center of screen
-        x_window = window.winfo_screenwidth() // 2 - self.WIDHTWINDOW // 2
-        y_window = window.winfo_screenheight() // 2 - self.HEIGHTWINDOW // 2
-        position = str(self.WIDHTWINDOW) + "x" + str(self.HEIGHTWINDOW) + "+" + str(x_window) + "+" + str(y_window)
+        x_window = window.winfo_screenwidth() // 2 - WIDHTWINDOW // 2
+        y_window = window.winfo_screenheight() // 2 - HEIGHTWINDOW // 2
+        position = str(WIDHTWINDOW) + "x" + str(HEIGHTWINDOW) + "+" + str(x_window) + "+" + str(y_window)
 
         window.geometry(position)
         window.configure(background=pBackground)

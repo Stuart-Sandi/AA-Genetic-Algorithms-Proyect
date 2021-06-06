@@ -5,6 +5,8 @@ from PIL import Image
 
 class Algoritmo:
 
+    listaDeGeneraciones = []
+
     def __init__(self):
         print()
 

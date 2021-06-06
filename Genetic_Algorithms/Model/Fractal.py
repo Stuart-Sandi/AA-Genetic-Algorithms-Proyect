@@ -10,24 +10,50 @@ class Tree:
     x1 = 300
     y1 = 550
     angle = -90
+    mostrarFractal = None
 
-    def __init__(self, depth, thickness, branch_thickness, fork_angle, branch_quantity, base_len):
+    # Parametros de entrada
+    depth = None
+    thickness = None
+    branch_thickness = None
+    fork_angle = None
+    branch_quantity = None
+    base_len = None
 
+    def __init__(self, depth, thickness, branch_thickness, branch_quantity, fork_angle, base_len, mostrarFractal,
+                 generacion, numArbol):
+
+        #Guardamos los valores de los parametros
+        self.depth = depth
+        self.thickness = thickness
+        self.branch_thickness = branch_thickness
+        self.fork_angle = fork_angle
+        self.branch_quantity = branch_quantity
+        self.base_len = base_len
+        self.mostrarFractal = mostrarFractal
+
+        # Crea el display que mostrara el fractal
         pygame.init()
         self.window = pygame.display.set_mode((600, 600))
         pygame.display.set_caption("Fractal Tree")
         self.screen = pygame.display.get_surface()
         self.screen.fill([255, 255, 255])
 
-        self.drawTree(self.x1, self.y1, self.angle, depth, branch_thickness, fork_angle, base_len, branch_quantity
-                      , thickness)
-        pygame.display.flip()
-        pygame.image.save(self.screen, "..\Imagen.jpg")
+        # Llama a la funcion creadora del fractal
+        self.drawTree(self.x1, self.y1, self.angle, self.depth, self.branch_thickness, self.fork_angle, self.base_len,
+                      self.branch_quantity, self.thickness)
 
-        # SE MANTIENE ESPERANDO POR CERRAR EL DISPLAY
-        while True:
-            if self.input(pygame.event.wait()) == 1:
-                break
+        if self.mostrarFractal:
+            pygame.display.flip()
+
+            # SE MANTIENE ESPERANDO POR CERRAR EL DISPLAY
+            while True:
+                if self.input(pygame.event.wait()) == 1:
+                    break
+
+        else:
+            path = "..\Generaciones\Generacion_"+str(generacion)+"\Arbol_"+str(numArbol)+".png"
+            pygame.image.save(self.screen, path)
 
         # CIERRA LA EJECUCION DEL DISPLAY DE PYGAME
         pygame.display.quit()
@@ -80,3 +106,6 @@ class Tree:
         if event.type == pygame.QUIT:
             return 1
         return 0
+
+    def parametrosABinario(self):
+        return

@@ -1,13 +1,20 @@
 # IMPORTS
-from View.MainWindow import MainWindow
-from View.FractalWindow import FractalWindow
-from Model.Fractal import Tree
-from Model.GeneticAlgorithm import Algoritmo
+
+import View.MainWindow as VM
+import View.FractalWindow as VF
+import Model.Fractal as MF
+import Model.GeneticAlgorithm as MG
+import Model.EnumValoresR as ME
+import ntpath
+import os
+import random
 
 
 # CLASSES
 class Controller:
     mainWindow = fractalWindow = None
+    archivoImagen = None
+    cantidadGeneraciones = 10
 
     def __init__(self):
         '''
@@ -15,7 +22,7 @@ class Controller:
         '''
 
         # Window Instance
-        self.mainWindow = MainWindow(self)
+        self.mainWindow = VM.MainWindow(self)
 
     def probarAlgoFractales(self):
         """
@@ -24,7 +31,7 @@ class Controller:
         Outputs:
         """
 
-        self.fractalWindow = FractalWindow(self)
+        self.fractalWindow = VF.FractalWindow(self)
         self.fractalWindow.main()
 
         return
@@ -38,11 +45,11 @@ class Controller:
 
         depth, thickness, branch_thickness, fork_angle, branch_quantity, base_len = self.validarDatosFractales()
         if depth != -1:
-            Tree(depth, thickness, branch_thickness, fork_angle, branch_quantity, base_len)
+            MF.Tree(depth, thickness, branch_thickness, fork_angle, branch_quantity, base_len, True, 0, 0)
         else:
             self.fractalWindow.showMessagesBox("¡Faltan valores o valores incorrectos!")
             self.fractalWindow.window.destroy()
-            self.fractalWindow = FractalWindow(self)
+            self.fractalWindow = VF.FractalWindow(self)
             self.fractalWindow.main()
         return
 
@@ -88,6 +95,74 @@ class Controller:
 
         return -1, 0, 0, 0, 0, 0
 
+    def abrirImagen(self):
+        self.archivoImagen = VM.filedialog.askopenfile(
+            title="Seleccione archivo", initialdir="../Siluetas/", filetypes=[("Archivos png", ".png")])
+        try:
+            self.mainWindow.mostrarNombreArchivo(ntpath.basename(self.archivoImagen.name))
+        except:
+            return
+
+    def algoritmoGenetico(self):
+
+        # Creamos un nuevo algoritmo para aplicarle todas las funciones(fitness, genetica, mutaciones)
+        algoritmo = MG.Algoritmo()
+
+        contadorGeneraciones = 1
+
+        # Ejecuta el while hasta que termine la cantidad de generaciones
+        while contadorGeneraciones <= self.cantidadGeneraciones:
+
+            # Creamos el directorio de cada generacion
+            path = "..\Generaciones\Generacion_"+str(contadorGeneraciones)
+            if not os.path.exists(path):
+                os.mkdir(path)
+
+                listaArboles = []
+                #Creamos 10 arboles
+                for i in range(10):
+
+                    # Las siguientes variables hacen referencia a los parametros de:
+                    # Depth, Thickness, branch_thickness, branch_quantity, fork_angle, base_len
+                    de, th, br_th, br_qu, f_a, b_l = self.crearParametrosRandom()
+                    arbol = MF.Tree(de, th, br_th, br_qu, f_a, b_l, False, contadorGeneraciones, i+1)
+                    listaArboles.append(arbol)
+
+                algoritmo.listaDeGeneraciones.append(listaArboles)
+
+            contadorGeneraciones += 1
+        print("Termino el algoritmo")
+        # print(algoritmo.fitness("../ImagenPrueba1.png", "../ImagenPrueba3.png"))
+
+    def crearParametrosRandom(self):
+
+        listaValoresP = []
+        for parametro in ME.ValoresRandom:
+            listaValoresP.append(parametro.value)
+
+        Depth = random.randint(listaValoresP[0][0], listaValoresP[0][1])
+        Thickness = random.randint(listaValoresP[1][0], listaValoresP[1][1])
+
+        listaRangosP = []
+        for i in range(2, len(listaValoresP)):
+
+            num1 = random.randint(listaValoresP[i][0], listaValoresP[i][1])
+            num2 = random.randint(listaValoresP[i][0], listaValoresP[i][1])
+
+            if num1 >= num2:
+                listaRangosP.append((num2, num1))
+            else:
+                listaRangosP.append((num1, num2))
+
+        #print("Depth: " + str(Depth))
+        #print("Thickness: " + str(Thickness))
+        #print("BranchThickness" + str(listaRangosP[0]))
+        #print("BranchQuantity" + str(listaRangosP[1]))
+        #print("ForkAngle" + str(listaRangosP[2]))
+        #print("BaseLen" + str(listaRangosP[3]))
+
+        return Depth, Thickness, listaRangosP[0], listaRangosP[1], listaRangosP[2], listaRangosP[3]
+
     def main(self):
         '''
         Function: This function is going to create a Window with all its characteristics
@@ -95,10 +170,8 @@ class Controller:
         Outputs:
         '''
 
-        #self.mainWindow.main()
-        algoritmo = Algoritmo()
-        print(algoritmo.fitness("../ImagenPrueba1.png", "../ImagenPrueba3.png"))
-
+        self.mainWindow.main()
+        #self.crearParametrosRandom()
 
 
 # This is going to create a controller and call main function
