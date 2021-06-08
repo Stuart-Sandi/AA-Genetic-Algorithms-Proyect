@@ -23,9 +23,11 @@ class Tree:
     # Direccion de la imagen
     path = None
 
-    # Instancias de los arboles madre y padre
-    padre = None
-    madre = None
+    # Instancias de los arboles padres
+    padres = []
+
+    #Mutacion
+    mutacion = None
 
     # Cadena de Bits
     porcentaje = None

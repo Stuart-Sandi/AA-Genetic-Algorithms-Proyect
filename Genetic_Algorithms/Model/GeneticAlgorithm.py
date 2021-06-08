@@ -112,4 +112,4 @@ class Algoritmo:
 
         porcentajeSimilitudPixeles = self.calcularSimilitudPixeles(srcImg1, srcImg2)
 
-        return (porcentajeArea + porcentajeSimilitudPixeles) / 2
+        return round(((porcentajeArea + porcentajeSimilitudPixeles) / 2), 4)
