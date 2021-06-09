@@ -26,7 +26,7 @@ class MainWindow:
         '''
 
         self.controller = controller
-        self.window = self.comCreator.createWindow('Algoritmos Genéticos', 'white', self.WIDHTWINDOW, self.HEIGHTWINDOW)
+        self.window = self.comCreator.createWindow('Algoritmos Genéticos', 'white', self.WIDHTWINDOW, self.HEIGHTWINDOW, 1)
         frame = self.comCreator.createFrame(self.window, 0, 0, self.WIDHTWINDOW-80, self.HEIGHTWINDOW-80)
 
         #LABELS

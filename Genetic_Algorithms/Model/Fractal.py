@@ -1,6 +1,7 @@
 import math
 import pygame
 import random
+from PIL import Image
 
 
 class Tree:
@@ -23,8 +24,13 @@ class Tree:
     # Direccion de la imagen
     path = None
 
+    #Datos relevantes del arbol
+    nombre = None
+    generacion = None
+    numArbol = None
+
     # Instancias de los arboles padres
-    padres = []
+    padres = None
 
     #Mutacion
     mutacion = None
@@ -32,6 +38,7 @@ class Tree:
     # Cadena de Bits
     porcentaje = None
     cadenaBits = None
+    puntoCorte = None
 
     # Normalizacion
     normalizacion = None
@@ -70,6 +77,9 @@ class Tree:
         else:
             self.path = "..\Generaciones\Generacion_"+str(generacion)+"\Arbol_"+str(numArbol)+".png"
             pygame.image.save(self.screen, self.path)
+            self.nombre = "G:"+str(generacion)+"-Arbol:"+str(numArbol)
+            self.generacion = generacion
+            self.numArbol = numArbol
 
         # CIERRA LA EJECUCION DEL DISPLAY DE PYGAME
         pygame.display.quit()

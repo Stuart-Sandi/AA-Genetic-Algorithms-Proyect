@@ -24,7 +24,8 @@ class FractalWindow:
         '''
 
         self.controller = controller
-        self.window = self.comCreator.createWindow('Algoritmos Genéticos/Fractales', 'white', self.WIDHTWINDOW, self.HEIGHTWINDOW)
+        self.window = self.comCreator.createWindow('Algoritmos Genéticos/Fractales', 'white', self.WIDHTWINDOW,
+                                                   self.HEIGHTWINDOW, 0)
         frame = self.comCreator.createFrame(self.window, 0, 0, self.WIDHTWINDOW-80, self.HEIGHTWINDOW-80)
 
         #LABELS

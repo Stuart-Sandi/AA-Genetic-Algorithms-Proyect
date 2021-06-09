@@ -3,6 +3,7 @@
 import View.MainWindow as VM
 import View.FractalWindow as VF
 import View.GenerationsWindow as VG
+import View.FractalInfoWindow as VFI
 import Model.Fractal as MF
 import Model.GeneticAlgorithm as MG
 import Model.EnumValoresR as ME
@@ -17,7 +18,7 @@ import random
 class Controller:
 
     # Variables globales necesarias
-    mainWindow = fractalWindow = generationsWindow = None
+    mainWindow = fractalWindow = generationsWindow = fractalInfoWindow = None
     archivoImagen = None
     cantidadGeneraciones = 10
     elementos = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
@@ -132,6 +133,7 @@ class Controller:
         self.borrarDirectoriosGeneraciones()
 
         # Creamos un nuevo algoritmo para aplicarle todas las funciones(fitness, genetica, mutaciones)
+        self.algoritmo = None
         self.algoritmo = MG.Algoritmo()
 
         contadorGeneraciones = 0
@@ -191,7 +193,7 @@ class Controller:
                         num1, num2 = self.obtenerPosicionCandidatos(listaPorcentajesCandidatos)
 
                         # Obtenemos las cadenas de cromosomas de los dos nuevos arboles
-                        cadenaBA1, cadenaBA2, mutacion1, mutacion2 = self.cruzarArbolesCandidatos(num1, num2,
+                        cadenaBA1, cadenaBA2, mutacion1, mutacion2, puntoCorte = self.cruzarArbolesCandidatos(num1, num2,
                                                                                                   listaArbolesAnterior)
 
                         # Creamos el primer arbol nuevo
@@ -203,9 +205,11 @@ class Controller:
                         # Agregamos si hubo mutacion
                         arbolN1.mutacion = mutacion1
 
+                        # Agregamos el punto de corte
+                        arbolN1.puntoCorte = puntoCorte - 1
+
                         # Agregamos los padres
-                        arbolN1.padres.append(listaArbolesAnterior[num1])
-                        arbolN1.padres.append(listaArbolesAnterior[num2])
+                        arbolN1.padres = [listaArbolesAnterior[num1], listaArbolesAnterior[num2]]
 
                         listaArboles.append(arbolN1)
 
@@ -224,9 +228,12 @@ class Controller:
                         # Agregamos si hubo mutacion
                         arbolN2.mutacion = mutacion1
 
+                        # Agregamos el punto de corte
+                        arbolN2.puntoCorte = puntoCorte - 1
+
                         # Agregamos los padres
-                        arbolN2.padres.append(listaArbolesAnterior[num1])
-                        arbolN2.padres.append(listaArbolesAnterior[num2])
+                        arbolN2.padres = [listaArbolesAnterior[num1], listaArbolesAnterior[num2]]
+
                         listaArboles.append(arbolN2)
 
                 # Agregamos la generacion creada a la lista de generaciones
@@ -234,7 +241,20 @@ class Controller:
 
             contadorGeneraciones += 1
 
+        # Agrega la cadena de cromosomas a la ultima generacion
+        listaArbolesAnterior = self.algoritmo.listaDeGeneraciones[len(self.algoritmo.listaDeGeneraciones)-1]
+
+        # Se modifican todos los arboles de la generacion anterior para agregar los porcentajes y cadenas de
+        # bits
+        for arbol in listaArbolesAnterior:
+
+            # Llamamos la funcion que nos crea la cadena de bits
+            arbol.cadenaBits = self.crearCadenaBits(arbol)
+
         print("Terminó de procesar")
+        self.generationsWindow = VG.GenerationsWindow(self, len(self.algoritmo.listaDeGeneraciones),
+                                                      self.algoritmo.listaDeGeneraciones)
+        self.generationsWindow.main()
 
     def obtenerDivisores(self, cadena):
         """
@@ -321,9 +341,8 @@ class Controller:
 
         puntoCorte = random.randint(0, len(arbol1.cadenaBits) - 1)
 
-        listaCadenas = [arbol1.cadenaBits[0:puntoCorte] +
-                        arbol2.cadenaBits[puntoCorte + 1: len(arbol2.cadenaBits) - 1], arbol2.cadenaBits[0:puntoCorte] +
-                        arbol1.cadenaBits[puntoCorte + 1: len(arbol1.cadenaBits) - 1]]
+        listaCadenas = [arbol1.cadenaBits[0:puntoCorte] + arbol2.cadenaBits[puntoCorte: len(arbol2.cadenaBits)],
+                        arbol2.cadenaBits[0:puntoCorte] + arbol1.cadenaBits[puntoCorte: len(arbol1.cadenaBits)]]
 
         # Proceso de mutacion
         mutacion = [False, True]
@@ -339,7 +358,7 @@ class Controller:
 
             listaHayMutacion.append(hayMutacion)
 
-        return listaCadenas[0], listaCadenas[1], listaHayMutacion[0], listaHayMutacion[1]
+        return listaCadenas[0], listaCadenas[1], listaHayMutacion[0], listaHayMutacion[1], puntoCorte
 
     def obtenerListaProbabilidad(self, elementos, pesos):
         """
@@ -426,7 +445,7 @@ class Controller:
         BaseLen1 = format(arbol.base_len[0], "08b")
         BaseLen2 = format(arbol.base_len[1], "08b")
         cadenaBits = Depth + Thickness + BranchThickness1 + BranchThickness2 + BranchQuantity1 + BranchQuantity2 + \
-                     ForkAngle1 + ForkAngle2 + BaseLen1 + BaseLen2
+                     BaseLen1 + BaseLen2 + ForkAngle1 + ForkAngle2
 
         return cadenaBits
 
@@ -439,8 +458,8 @@ class Controller:
         """
 
         # Hace un wrap para separar los bits en cadenas de 8 bits
-        Depth, Thickness, BranchThickness1, BranchThickness2, BranchQuantity1, BranchQuantity2, ForkAngle1, ForkAngle2 \
-            , BaseLen1, BaseLen2 = wrap(cadenaBits, 8)
+        Depth, Thickness, BranchThickness1, BranchThickness2, BranchQuantity1, BranchQuantity2, BaseLen1, BaseLen2, \
+        ForkAngle1, ForkAngle2 = wrap(cadenaBits, 8)
 
         # Convierte los numeros a enteros y valida que el numero no supere los limites
         Depth = self.validarRangoParametrosBits(Depth, ME.ValoresRandom.Depth.value)
@@ -507,6 +526,12 @@ class Controller:
         print("Directorios borrados")
         return
 
+    def datosBoton(self, button):
+
+        arbol = self.algoritmo.listaDeGeneraciones[button[0]][button[1]]
+        self.fractalInfoWindow = VFI.FractalInfoWindow(self, arbol)
+        self.fractalInfoWindow.main()
+
     def main(self):
         '''
         Function: Funcion encargada de correr el programa fuente
@@ -515,10 +540,8 @@ class Controller:
         '''
 
         # Window Instance
-        #self.mainWindow = VM.MainWindow(self)
-        #self.mainWindow.main()
-        self.generationsWindow = VG.GenerationsWindow(self, 10, [])
-        self.generationsWindow.main()
+        self.mainWindow = VM.MainWindow(self)
+        self.mainWindow.main()
 
 
 

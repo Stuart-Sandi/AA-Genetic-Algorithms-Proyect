@@ -1,6 +1,5 @@
 from tkinter import *
 from tkinter.ttk import Combobox
-from PIL import Image, ImageTk
 
 
 class ComponentCreator:
@@ -9,14 +8,17 @@ class ComponentCreator:
     WIDHTWINDOW = 860
     HEIGHTWINDOW = 350
 
-    def createWindow(self, pTitle, pBackground, WIDHTWINDOW, HEIGHTWINDOW):
+    def createWindow(self, pTitle, pBackground, WIDHTWINDOW, HEIGHTWINDOW, type):
         '''
         Function: This function is responsible for creating a window with a title and the background color
         Inputs: Title, Background color
         Outputs: Window
         '''
-
-        window = Tk()
+        window = None
+        if type == 1:
+            window = Tk()
+        else:
+            window = Toplevel()
         window.resizable(width=False, height=False)
         window.title(pTitle)
 
@@ -101,44 +103,3 @@ class ComponentCreator:
         button.configure(font=("Tahoma", 10, "italic"), bd=5)
         button.place(x=pX, y=pY, width=pWidth, height=pHeight)
         return button
-
-    def createBotonesArboles(self, pComponent, listaGeneraciones):
-
-        matrizBotones = []
-        for i in range(10):
-
-            listaBotones = []
-            for w in range(10):
-                # Obtenemos la imagen del arbol
-                img = PhotoImage(file="..\Silueta1.png")
-
-                listaBotones.append(Button(pComponent, image=img, width=115, height=115).grid(row=i, column=w))
-
-            matrizBotones.append(listaBotones)
-
-        return matrizBotones
-
-    def createCanvas(self, pComponent, cantidadGeneraciones):
-
-        canvas = Canvas(pComponent, width=1180, height=450)
-        scrollbar = Scrollbar(pComponent, orient="vertical", command=canvas.yview)
-        scrollable_frame = Frame(canvas)
-
-        scrollable_frame.bind(
-            "<Configure>",
-            lambda e: canvas.configure(
-                scrollregion=canvas.bbox("all")
-            )
-        )
-
-        canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
-
-        canvas.configure(yscrollcommand=scrollbar.set)
-
-        # Crea la matriz de botones con la imagen de los arboles
-        self.createBotonesArboles(scrollable_frame, [])
-
-        canvas.pack(side="left", fill="both", expand=True)
-        scrollbar.pack(side="right", fill="y")
-
-        return canvas
