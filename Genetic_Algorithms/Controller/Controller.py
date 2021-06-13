@@ -115,7 +115,7 @@ class Controller:
         self.archivoImagen = VM.filedialog.askopenfile(
             title="Seleccione archivo", initialdir="../Siluetas/", filetypes=[("Archivos png", ".png")])
         try:
-            self.mainWindow.mostrarNombreArchivo(ntpath.basename(self.archivoImagen.name))
+            self.mainWindow.mostrarNombreArchivo(self.archivoImagen.name)
             self.archivoImagen = self.archivoImagen.name
         except:
             return
@@ -252,6 +252,7 @@ class Controller:
             arbol.cadenaBits = self.crearCadenaBits(arbol)
 
         print("Terminó de procesar")
+        self.generationsWindow = None
         self.generationsWindow = VG.GenerationsWindow(self, len(self.algoritmo.listaDeGeneraciones),
                                                       self.algoritmo.listaDeGeneraciones)
         self.generationsWindow.main()
