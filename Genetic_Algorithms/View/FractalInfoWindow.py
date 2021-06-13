@@ -50,7 +50,7 @@ class FractalInfoWindow:
         if padres is None:
             padres = "No tiene"
         else:
-            padres = str(self.arbol.padres[0].nombre)+", "+str(self.arbol.padres[1].nombre)
+            padres = str(self.arbol.padres[1].nombre)+", "+str(self.arbol.padres[0].nombre)
 
         label = Label(frame, text=
                         "Nombre: "+str(self.arbol.nombre)+"\n"+
@@ -64,10 +64,15 @@ class FractalInfoWindow:
                         "Rango ángulo de inclinacion: "+str(self.arbol.fork_angle)+"\n\n"+
                         "Padres: "+padres+"\n\n"+
                         "Sufrió Mutacion: "+mutacion+"\n\n"+
-                        "Cadena de cromosomas: - Punto de corte: "+str(self.arbol.puntoCorte)+"\n"+str(self.arbol.cadenaBits)
+                        "Cadena de cromosomas: - Punto de corte: "+str(self.arbol.puntoCorte)
                         )
         label.configure(font=("Tahoma", 9, "italic"))
         label.place(x=20, y=300, width=600, height=250)
+
+        entry = Entry(frame)
+        entry.insert(0, str(self.arbol.cadenaBits))
+        entry.place(x=20, y=555, width=600, height=40)
+        # +str(self.arbol.cadenaBits)
 
 
 
