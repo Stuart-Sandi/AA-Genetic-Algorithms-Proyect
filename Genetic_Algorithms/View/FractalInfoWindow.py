@@ -52,6 +52,12 @@ class FractalInfoWindow:
         else:
             padres = str(self.arbol.padres[1].nombre)+", "+str(self.arbol.padres[0].nombre)
 
+        porcentajeA = self.arbol.normalizacion
+        if porcentajeA is None:
+            porcentajeA = '-'
+        else:
+            porcentajeA = str(self.arbol.normalizacion)
+
         label = Label(frame, text=
                         "Nombre: "+str(self.arbol.nombre)+"\n"+
                         "Arbol: #"+str(self.arbol.numArbol)+"\n"+
@@ -63,7 +69,8 @@ class FractalInfoWindow:
                         "Rango largo de las ramas: "+str(self.arbol.base_len)+"\n"+
                         "Rango ángulo de inclinacion: "+str(self.arbol.fork_angle)+"\n\n"+
                         "Padres: "+padres+"\n\n"+
-                        "Sufrió Mutacion: "+mutacion+"\n\n"+
+                        "Sufrió Mutacion: "+mutacion+"\n"+
+                        "Resultado Adaptabilidad: "+porcentajeA+"\n\n"
                         "Cadena de cromosomas: - Punto de corte: "+str(self.arbol.puntoCorte)
                         )
         label.configure(font=("Tahoma", 9, "italic"))

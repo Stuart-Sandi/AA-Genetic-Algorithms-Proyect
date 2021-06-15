@@ -1,4 +1,5 @@
 # IMPORTS
+from timeit import default_timer
 
 import View.MainWindow as VM
 import View.FractalWindow as VF

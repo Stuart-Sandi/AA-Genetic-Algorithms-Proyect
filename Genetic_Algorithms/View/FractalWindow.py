@@ -33,8 +33,8 @@ class FractalWindow:
         self.comCreator.createLabel(frame, "Seleccione la profundidad del árbol: ", 120, 140, 280, 40)
         self.comCreator.createLabel(frame, "Seleccione el grosor del tronco: ", 150, 200, 250, 40)
         self.comCreator.createLabel(frame, "Seleccione el rango de grosor de las ramas: ", 70, 250, 330, 40)
-        self.comCreator.createLabel(frame, "Seleccione el rango de los ángulos entre ramas: ", 40, 300, 360, 40)
-        self.comCreator.createLabel(frame, "Seleccione el rango de la cantidad de ramas: ", 50, 350, 350, 40)
+        self.comCreator.createLabel(frame, "Seleccione el rango de la cantidad de ramas: ", 50, 300, 350, 40)
+        self.comCreator.createLabel(frame, "Seleccione el rango de los ángulos entre ramas: ", 40, 350, 360, 40)
         self.comCreator.createLabel(frame, "Seleccione el rango de largo de las ramas: ", 70, 400, 330, 40)
 
         #ENTRY

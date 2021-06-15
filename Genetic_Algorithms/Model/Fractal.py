@@ -36,11 +36,11 @@ class Tree:
     mutacion = None
 
     # Cadena de Bits
-    porcentaje = None
     cadenaBits = None
     puntoCorte = None
 
-    # Normalizacion
+    # Adaptabilidad
+    porcentaje = None
     normalizacion = None
 
     def __init__(self, depth, thickness, branch_thickness, branch_quantity, fork_angle, base_len, mostrarFractal,
@@ -68,6 +68,7 @@ class Tree:
 
         if self.mostrarFractal:
             pygame.display.flip()
+            pygame.image.save(self.screen, "..\Siluetas\SiluetaNueva.png")
 
             # SE MANTIENE ESPERANDO POR CERRAR EL DISPLAY
             while True:
